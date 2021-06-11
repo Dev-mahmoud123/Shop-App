@@ -6,6 +6,7 @@ import 'package:shopping/provider/password%20_visibility_provider.dart';
 import 'package:shopping/provider/theme_provider.dart';
 import 'package:shopping/services/remote/cart/get_cart_service.dart';
 import 'package:shopping/services/remote/cart/post_cart_service.dart';
+import 'package:shopping/services/remote/complaints/comaplaints_service.dart';
 import 'package:shopping/services/remote/contacts/contacts_service.dart';
 import 'package:shopping/services/remote/faqs/faqs_service.dart';
 import 'package:shopping/services/remote/favorite/get_favorite_service.dart';
@@ -19,6 +20,7 @@ import 'package:shopping/services/remote/user/get_profile_service.dart';
 import 'package:shopping/services/remote/user/update_profile_service.dart';
 import 'package:shopping/viewModels/cart_view_model/get_cart_view_model.dart';
 import 'package:shopping/viewModels/cart_view_model/post_cart_view_model.dart';
+import 'package:shopping/viewModels/complaints_view_model/complaints_view_model.dart';
 import 'package:shopping/viewModels/contacts_view_model/contacts_view_model.dart';
 import 'package:shopping/viewModels/faqs_view_model/faqs_view_model.dart';
 import 'package:shopping/viewModels/favorite_view_model/favorite_view_model.dart';
@@ -133,4 +135,10 @@ final contactViewModelProvider = ChangeNotifierProvider<ContactsViewModel>(
 // FAQs Provider
 final faqsProvider = Provider<FAQsService>((ref) => FAQsService());
 final faqsViewModelProvider =
-    ChangeNotifierProvider((ref) => FAQsViewModel(ref.read));
+    ChangeNotifierProvider<FAQsViewModel>((ref) => FAQsViewModel(ref.read));
+
+// Complaints Provider
+final complaintsProvider =
+    Provider<ComplaintsService>((ref) => ComplaintsService());
+final complaintsViewModelProvider = ChangeNotifierProvider<ComplaintsViewModel>(
+    (ref) => ComplaintsViewModel(ref.read));

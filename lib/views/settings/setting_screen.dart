@@ -5,6 +5,7 @@ import 'package:shopping/components/reusable_components.dart';
 import 'package:shopping/constant/urls.dart';
 import 'package:shopping/services/local/catch_data.dart';
 import 'package:shopping/views/auth_screen/login_screen.dart';
+import 'package:shopping/views/complaints_screen/complaints_screen.dart';
 import 'package:shopping/views/contacts_screen/contact_screen.dart';
 import 'package:shopping/views/faqs_screen/faqs_screen.dart';
 import 'package:shopping/views/settings/terms_screen.dart';
@@ -12,9 +13,7 @@ import 'package:shopping/views/settings/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/provider/providers.dart';
 
-
 import 'about_screen.dart';
-
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -116,6 +115,27 @@ class _SettingScreenState extends State<SettingScreen> {
                     thickness: 1,
                   ),
                 ),
+                ListTile(
+                  onTap: () {
+                    navigateTo(context, ComplaintsScreen());
+                  },
+                  title: Text(
+                    'Complaints',
+                    style: TextStyle(fontSize: 18.w),
+                  ),
+                  leading: Icon(Icons.error_outline),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 15,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(
+                    height: 0.5.h,
+                    thickness: 1,
+                  ),
+                ),
                 ExpansionTileWidget(
                   title: 'Language',
                   image1: 'assets/images/ksa.png',
@@ -131,7 +151,6 @@ class _SettingScreenState extends State<SettingScreen> {
                     thickness: 1,
                   ),
                 ),
-
                 ExpansionTileWidget(
                   title: 'Theme',
                   leadingWidget: Icon(Icons.brightness_4_outlined),
