@@ -6,6 +6,7 @@ import 'package:shopping/constant/urls.dart';
 import 'package:shopping/services/local/catch_data.dart';
 import 'package:shopping/views/auth_screen/login_screen.dart';
 import 'package:shopping/views/contacts_screen/contact_screen.dart';
+import 'package:shopping/views/faqs_screen/faqs_screen.dart';
 import 'package:shopping/views/settings/terms_screen.dart';
 import 'package:shopping/views/settings/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,6 +83,27 @@ class _SettingScreenState extends State<SettingScreen> {
                     style: TextStyle(fontSize: 18.w),
                   ),
                   leading: Icon(Icons.phone),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 15,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(
+                    height: 0.5.h,
+                    thickness: 1,
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    navigateTo(context, FAQsScreen());
+                  },
+                  title: Text(
+                    'FAQs',
+                    style: TextStyle(fontSize: 18.w),
+                  ),
+                  leading: Icon(Icons.question_answer),
                   trailing: Icon(
                     Icons.arrow_forward_ios,
                     size: 15,

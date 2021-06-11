@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/models/auth/auth_model.dart';
+import 'package:shopping/models/faqs/faqs_model.dart';
 import 'package:shopping/provider/counter_provider.dart';
 import 'package:shopping/provider/password%20_visibility_provider.dart';
 import 'package:shopping/provider/theme_provider.dart';
 import 'package:shopping/services/remote/cart/get_cart_service.dart';
 import 'package:shopping/services/remote/cart/post_cart_service.dart';
 import 'package:shopping/services/remote/contacts/contacts_service.dart';
+import 'package:shopping/services/remote/faqs/faqs_service.dart';
 import 'package:shopping/services/remote/favorite/get_favorite_service.dart';
 import 'package:shopping/services/remote/favorite/post_ favorite_service.dart';
 import 'package:shopping/services/remote/home/home_service.dart';
@@ -19,6 +20,7 @@ import 'package:shopping/services/remote/user/update_profile_service.dart';
 import 'package:shopping/viewModels/cart_view_model/get_cart_view_model.dart';
 import 'package:shopping/viewModels/cart_view_model/post_cart_view_model.dart';
 import 'package:shopping/viewModels/contacts_view_model/contacts_view_model.dart';
+import 'package:shopping/viewModels/faqs_view_model/faqs_view_model.dart';
 import 'package:shopping/viewModels/favorite_view_model/favorite_view_model.dart';
 import 'package:shopping/viewModels/notification_view_model/notification_view_model.dart';
 import 'package:shopping/viewModels/product_view_model/category_product_view_model.dart';
@@ -127,3 +129,8 @@ final changePassViewModelProvider =
 final contactProvider = Provider<ContactService>((ref) => ContactService());
 final contactViewModelProvider = ChangeNotifierProvider<ContactsViewModel>(
     (ref) => ContactsViewModel(ref.read));
+
+// FAQs Provider
+final faqsProvider = Provider<FAQsService>((ref) => FAQsService());
+final faqsViewModelProvider =
+    ChangeNotifierProvider((ref) => FAQsViewModel(ref.read));

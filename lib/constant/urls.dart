@@ -18,6 +18,7 @@ class URL {
   static get search => '$baseURL/products/search';
   static get changePassword => '$baseURL/change-password';
   static get contacts => '$baseURL/contacts';
+  static get faqs => '$baseURL/faqs';
 
 
 
