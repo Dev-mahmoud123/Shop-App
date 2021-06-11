@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/constant/colors.dart';
 import 'package:shopping/models/faqs/faqs_model.dart';
 import 'package:shopping/provider/providers.dart';
-import 'package:shopping/views/settings/widgets.dart';
 
 class FAQsScreen extends StatefulWidget {
   @override
