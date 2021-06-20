@@ -47,7 +47,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                      submit();
                     },
                     text: 'SKIP',
-                    color: Colors.blue,
+                    color: defaultColor,
                     fontSize: 20.w,
                   ),
                 ),
@@ -91,7 +91,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 height: 20.h,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: ElevatedButton(
                   onPressed: () {
                     if (isLast) {
@@ -103,7 +103,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 100),
+                    padding: const EdgeInsets.only(left: 120),
                     child: Row(
                       children: [
                         Text(
@@ -113,10 +113,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         Spacer(),
                         Container(
                           height: 35.h,
-                          width: 35.w,
+                          width: 25.w,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(35),
                           ),
                           child: Icon(
                             Icons.arrow_forward_ios,

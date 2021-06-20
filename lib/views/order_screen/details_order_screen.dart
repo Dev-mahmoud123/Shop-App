@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping/components/functions.dart';
 import 'package:shopping/components/reusable_components.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shopping/constant/colors.dart';
-import 'package:shopping/views/order_screen/map_screen.dart';
 import 'package:shopping/views/order_screen/widget/radio_button.dart';
+import 'package:shopping/views/order_screen/widget/select_address_widget.dart';
 
 class DetailsOrderScreen extends StatefulWidget {
   final double totalPrice;
@@ -18,9 +17,9 @@ class DetailsOrderScreen extends StatefulWidget {
 
 class _DetailsOrderScreenState extends State<DetailsOrderScreen> {
   int groupValue = 1;
+  bool switchValue= false;
 
   void handleRadio(int value) {
-    defaultToast(message: groupValue.toString());
     setState(() {
       groupValue = value;
     });
@@ -29,43 +28,57 @@ class _DetailsOrderScreenState extends State<DetailsOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          defaultHeader(height: 100.h, title: 'Details Order'),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              children: [
-                Text(
-                  'Total Price',
-                  style: TextStyle(
-                      fontSize: 28.w,
-                      fontWeight: FontWeight.w400,
-                      color: textColor2),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Text(
-                  '${widget.totalPrice} L.E',
-                  style: TextStyle(
-                      fontSize: 22.w,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.red),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 40.h,
-                      color: containerColor,
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            defaultHeader(
+                height: 100.h, title: 'Details Order', context: context),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                children: [
+                  Text(
+                    'Total Price',
+                    style: TextStyle(
+                        fontSize: 28.w,
+                        fontWeight: FontWeight.w400,
+                        color: textColor2),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    '${widget.totalPrice} L.E',
+                    style: TextStyle(
+                        fontSize: 22.w,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.red),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 40.h,
+                        color: containerColor,
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: Text(
+                            'Delivery Location',
+                            style: TextStyle(
+                              fontSize: 15.w,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 25),
                         child: Text(
                           'Delivery Location',
                           style: TextStyle(
@@ -74,95 +87,67 @@ class _DetailsOrderScreenState extends State<DetailsOrderScreen> {
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 25),
-                      child: Text(
-                        'Delivery Location',
-                        style: TextStyle(
-                          fontSize: 15.w,
-                          fontWeight: FontWeight.w400,
-                        ),
+                      SelectAddressWidget(),
+                      SizedBox(
+                        height: 30.h,
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                      Container(
+                        width: double.infinity,
+                        height: 40.h,
                         color: containerColor,
-                      ),
-                      margin: EdgeInsets.symmetric(horizontal: 26),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: InkWell(
-                          onTap: () {
-                            navigateTo(context, MapScreen());
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                'Please enter delivery location',
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontSize: 11.w,
-                                ),
-                              ),
-                              Spacer(),
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.red,
-                              )
-                            ],
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: Text(
+                            'Payment Method',
+                            style: TextStyle(
+                              fontSize: 15.w,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 40.h,
-                      color: containerColor,
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Text(
-                          'Payment Method',
-                          style: TextStyle(
-                            fontSize: 15.w,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        child: Column(
+                          children: [
+                            RadioButton(
+                              value: 1,
+                              text: 'Pay Online',
+                              onChange: handleRadio,
+                              groupValue: groupValue,
+                            ),
+                            RadioButton(
+                              value: 2,
+                              text: ' Pay Cash',
+                              onChange: handleRadio,
+                              groupValue: groupValue,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Column(
-                        children: [
-                          RadioButton(
-                            value: 1,
-                            text: 'Pay Online',
-                            onChange: handleRadio,
-                            groupValue: groupValue,
-                          ),
-                          RadioButton(
-                            value: 2,
-                            text: ' Pay Cash',
-                            onChange: handleRadio,
-                            groupValue: groupValue,
-                          ),
-                        ],
+                      SizedBox(height:10,),
+                     Padding(
+                       padding: const EdgeInsets.only(left: 20 ,right: 5),
+                       child: Row(
+                         children: [
+                           Text('Use Points' , style: TextStyle(fontSize: 17.w),),
+                           Spacer(),
+                           Switch(value: switchValue, onChanged: (value){
+                             setState(() {
+                               switchValue = value;
+                               print(switchValue);
+                             });
+                           }),
+                         ],
+                       ),
+                     ),
+                      SizedBox(
+                        height: 50.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 80.h,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
@@ -171,14 +156,16 @@ class _DetailsOrderScreenState extends State<DetailsOrderScreen> {
                               press: () {},
                               text: 'Confirm',
                               color: Colors.white,
-                              fontSize: 20.w)),
-                    ),
-                  ],
-                ),
-              ],
+                              fontSize: 20.w),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -30,7 +30,7 @@ class _ProductScreenState extends State<ProductScreen> {
         child: Column(
           children: [
             defaultHeader(
-                height: 100.h, title: widget.categoryName, context: context),
+                height: 120.h, title: widget.categoryName, context: context),
             Consumer(builder: (context, watch, child) {
               if (watch(categoryProduct).isLoading) {
                 return LoadingWidget();

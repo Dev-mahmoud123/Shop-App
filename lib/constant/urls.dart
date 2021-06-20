@@ -20,6 +20,7 @@ class URL {
   static get contacts => '$baseURL/contacts';
   static get faqs => '$baseURL/faqs';
   static get complaints => '$baseURL/complaints';
+  static get address => '$baseURL/addresses';
 
 
 

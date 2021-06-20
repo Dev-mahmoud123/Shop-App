@@ -56,7 +56,7 @@ class _SliderImagesWidgetState extends State<SliderImagesWidget> {
                 height: 40.h,
                 width: 40.w,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                     color:widget.model.data.inFavorites ? defaultColor: Colors.black12),
                 child: IconButton(
                   icon: Icon(Icons.favorite_border),

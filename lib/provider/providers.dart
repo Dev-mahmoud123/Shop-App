@@ -4,6 +4,8 @@ import 'package:shopping/models/faqs/faqs_model.dart';
 import 'package:shopping/provider/counter_provider.dart';
 import 'package:shopping/provider/password%20_visibility_provider.dart';
 import 'package:shopping/provider/theme_provider.dart';
+import 'package:shopping/services/remote/address/get_address_service.dart';
+import 'package:shopping/services/remote/address/post_address_service.dart';
 import 'package:shopping/services/remote/cart/get_cart_service.dart';
 import 'package:shopping/services/remote/cart/post_cart_service.dart';
 import 'package:shopping/services/remote/complaints/comaplaints_service.dart';
@@ -18,6 +20,8 @@ import 'package:shopping/services/remote/search/search_service.dart';
 import 'package:shopping/services/remote/user/change_password_service.dart';
 import 'package:shopping/services/remote/user/get_profile_service.dart';
 import 'package:shopping/services/remote/user/update_profile_service.dart';
+import 'package:shopping/viewModels/address_view_model/get_addresst_view_model.dart';
+import 'package:shopping/viewModels/address_view_model/post_address_view_model.dart';
 import 'package:shopping/viewModels/cart_view_model/get_cart_view_model.dart';
 import 'package:shopping/viewModels/cart_view_model/post_cart_view_model.dart';
 import 'package:shopping/viewModels/complaints_view_model/complaints_view_model.dart';
@@ -142,3 +146,15 @@ final complaintsProvider =
     Provider<ComplaintsService>((ref) => ComplaintsService());
 final complaintsViewModelProvider = ChangeNotifierProvider<ComplaintsViewModel>(
     (ref) => ComplaintsViewModel(ref.read));
+
+// get Address data provider
+final addressServiceProvider =
+    Provider<GetAddressService>((ref) => GetAddressService());
+final addressViewModelProvider = ChangeNotifierProvider<GetAddressViewModel>(
+    (ref) => GetAddressViewModel(ref.read));
+
+// post Address provider
+final postAddressServiceProvider =
+    Provider<PostAddressService>((ref) => PostAddressService());
+final postAddressViewModel = ChangeNotifierProvider<PostAddressViewModel>(
+    (ref) => PostAddressViewModel(ref.read));

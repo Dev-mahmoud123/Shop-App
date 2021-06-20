@@ -8,6 +8,8 @@ import 'package:shopping/constant/colors.dart';
 import 'package:shopping/views/auth_screen/new_password_screen.dart';
 
 class VerifyCodeScreen extends StatelessWidget {
+  final String email;
+  const VerifyCodeScreen({Key key, this.email}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

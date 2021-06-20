@@ -1,10 +1,10 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping/constant/colors.dart';
-import 'package:shopping/models/google_maps/directions_model.dart';
-import 'package:shopping/services/google_map/direction_service.dart';
+import 'package:shopping/views/order_screen/widget/bottom_sheet_function.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -12,19 +12,19 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(30.0444, 31.2357),
-    zoom: 11.5,
-  );
-
-  GoogleMapController _googleMapController;
-  Marker _origin, _destination;
-  Directions _info;
+  LatLng latLng;
+  CameraPosition _cameraPosition;
+  GoogleMapController _controller;
+  TextEditingController locationController = TextEditingController();
+  Set<Marker> _markers = {};
+  List<Address> result = [];
 
   @override
-  void dispose() {
-    _googleMapController.dispose();
-    super.dispose();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _cameraPosition = CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
+    getCurrentPosition();
   }
 
   @override
@@ -32,143 +32,140 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text(' Google Maps'),
+        title: Text('Map'),
         backgroundColor: defaultColor,
         actions: [
-          if (_origin != null)
-            TextButton(
-              onPressed: () => _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: _origin.position,
-                    zoom: 14.5,
-                    tilt: 50.0,
-                  ),
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              child: Text('ORIGIN'),
+          TextButton(
+            onPressed: () {
+              displayBottomSheet(context);
+            },
+            child: Text(
+              'Add Address',
+              style: TextStyle(color: Colors.white),
             ),
-          if (_destination != null)
-            TextButton(
-              onPressed: () => _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: _destination.position,
-                    zoom: 14.5,
-                    tilt: 50.0,
-                  ),
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.blue,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              child: const Text('DEST'),
-            )
+          )
         ],
       ),
       body: Stack(
-        alignment: Alignment.center,
         children: [
-          GoogleMap(
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (controller) => _googleMapController = controller,
-            markers: {
-              if (_origin != null) _origin,
-              if (_destination != null) _destination,
-            },
-            polylines: {
-              if (_info != null)
-                Polyline(
-                  polylineId: PolylineId('overview_polyline'),
-                  color: Colors.red,
-                  width: 5,
-                  points: _info.polylinePoints
-                      .map((e) => LatLng(e.latitude, e.longitude))
-                      .toList(),
+          (latLng != null)
+              ? GoogleMap(
+                  initialCameraPosition: _cameraPosition,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller = controller;
+                    _controller.animateCamera(
+                        CameraUpdate.newCameraPosition(_cameraPosition));
+                  },
+                  markers: _markers,
                 )
-            },
-            onLongPress: _addMarker,
-          ),
-          if (_info != null)
-            Positioned(
-              top: 20.0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                decoration: BoxDecoration(
-                  color: Colors.yellowAccent,
-                  borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0, 2),
-                      blurRadius: 6.0,
-                    )
-                  ],
-                ),
-                child: Text(
-                  '${_info.totalDistance}, ${_info.totalDuration} ',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
+              : Container(),
+          Positioned(
+            top: 50.0,
+            right: 15.0,
+            left: 15.0,
+            child: Container(
+              height: 50.0,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3.0),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(1.0, 5.0),
+                      blurRadius: 10,
+                      spreadRadius: 3)
+                ],
+              ),
+              child: TextField(
+                cursorColor: Colors.black,
+                controller: locationController,
+                decoration: InputDecoration(
+                  icon: Container(
+                    margin: EdgeInsets.only(left: 20, top: 0),
+                    width: 10,
+                    height: 10,
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.green,
+                    ),
                   ),
+                  hintText: "pick up",
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(left: 15.0, top: 12.0),
                 ),
               ),
             ),
+          ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        onPressed: () {
-          _googleMapController.animateCamera(_info != null
-              ? CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-              : CameraUpdate.newCameraPosition(_initialCameraPosition));
-        },
-        child: Icon(Icons.center_focus_strong),
       ),
     );
   }
 
-  void _addMarker(LatLng pos) async {
-    if (_origin == null || (_origin != null && _destination != null)) {
-      // Origin is not set OR Origin/Destination are both set
-      // Set origin
-      setState(() {
-        _origin = Marker(
-          markerId: MarkerId('origin'),
-          infoWindow: InfoWindow(title: 'Origin'),
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-          position: pos,
-        );
-        _destination = null;
-        _info = null;
-      });
-    } else {
-      // Origin is already set
-      // Set destination
-      setState(() {
-        _destination = Marker(
-          markerId: const MarkerId('destination'),
-          infoWindow: const InfoWindow(title: 'Destination'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: pos,
-        );
-      });
+  void getCurrentPosition() async {
+    bool isServiceEnabled;
+    isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isServiceEnabled) {
+      return;
+    }
+    LocationPermission permission = await Geolocator.checkPermission();
+    // ignore: unrelated_type_equality_checks
+    if (permission != PermissionStatus.granted) {
+      permission = await Geolocator.requestPermission();
+      // ignore: unrelated_type_equality_checks
+      if (permission != PermissionStatus.granted) getLocation();
+      return;
+    }
+    getLocation();
+  }
 
-      // Get Directions
-      final directions = await DirectionsService()
-          .getDirections(origin: _origin.position, destination: pos);
-      setState(() {
-        _info = directions;
-      });
+  void getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position.latitude);
+
+    setState(
+      () {
+        latLng = new LatLng(position.latitude, position.longitude);
+        _cameraPosition = CameraPosition(target: latLng, zoom: 11.0);
+        if (_controller != null) {
+          _controller
+              .animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+          _markers.add(
+            Marker(
+                markerId: MarkerId('a'),
+                draggable: true,
+                flat: true,
+                visible: true,
+                position: latLng,
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
+                onDragEnd: (_currentLatLng) {
+                  latLng = _currentLatLng;
+                }),
+          );
+        }
+      },
+    );
+    getCurrentAddress();
+  }
+
+  void getCurrentAddress() async {
+    final coordinates = new Coordinates(latLng.latitude, latLng.longitude);
+    result = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = result.first;
+    if (first != null) {
+      var address;
+      address = first.featureName;
+      address = '$address, ${first.subLocality}';
+      address = '$address, ${first.subLocality}';
+      address = '$address, ${first.locality}';
+      address = '$address, ${first.countryName}';
+      address = '$address, ${first.postalCode}';
+      locationController.text = address;
     }
   }
+
 }
