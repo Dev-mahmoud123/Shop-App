@@ -6,13 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:shopping/models/home/category_model.dart';
 
 
-enum LoadingState{
-  Searching,
-  Success,
-  Error,
-}
-
-
 class CategoryService  extends ChangeNotifier{
   CategoryModel loadCategories ;
 

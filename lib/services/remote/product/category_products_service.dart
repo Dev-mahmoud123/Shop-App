@@ -24,7 +24,6 @@ class CategoryProductsService {
         categoryProducts.data.products.forEach((element) {
           favorites.addAll({element.id: element.inFavorites});
         });
-        print(favorites);
         return categoryProducts;
       } else
         print('status code = ${response.statusCode}');

@@ -16,10 +16,10 @@ class GetFavViewModel extends ChangeNotifier {
     final loadingState = reader(loadingStateProvider);
 
     final result = await favouriteServicesProvider.getFavoritesProducts();
-    loadingState.state = false;
 
     if (result.status) {
       defaultToast(message: 'Success', color: Colors.green);
+      loadingState.state = false;
       return result;
     }
     defaultToast(message: 'Error', color: Colors.red);

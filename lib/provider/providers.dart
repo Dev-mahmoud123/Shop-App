@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/models/auth/auth_model.dart';
 import 'package:shopping/models/faqs/faqs_model.dart';
+import 'package:shopping/provider/connectivity_provirder.dart';
 import 'package:shopping/provider/counter_provider.dart';
 import 'package:shopping/provider/password%20_visibility_provider.dart';
+import 'package:shopping/provider/order_screen_provider.dart';
 import 'package:shopping/provider/theme_provider.dart';
 import 'package:shopping/services/remote/address/get_address_service.dart';
 import 'package:shopping/services/remote/address/post_address_service.dart';
@@ -16,6 +18,7 @@ import 'package:shopping/services/remote/favorite/post_ favorite_service.dart';
 import 'package:shopping/services/remote/home/home_service.dart';
 import 'package:shopping/services/remote/auth/user_service.dart';
 import 'package:shopping/services/remote/notification/notification_service.dart';
+import 'package:shopping/services/remote/product/produc_details_service.dart';
 import 'package:shopping/services/remote/search/search_service.dart';
 import 'package:shopping/services/remote/user/change_password_service.dart';
 import 'package:shopping/services/remote/user/get_profile_service.dart';
@@ -39,12 +42,23 @@ import 'package:shopping/viewModels/user_View_model/change_password_view_model.d
 import 'package:shopping/viewModels/user_View_model/register_view_model.dart';
 import 'package:shopping/viewModels/user_View_model/update_profile_view_model.dart';
 
-final authStatusProvider = StateProvider<Auth>((ref) => Auth());
-
+// User Provider
 final userAuth = ChangeNotifierProvider<UserHelper>((ref) => UserHelper());
 
 /// Loading provider
 final loadingStateProvider = StateProvider<bool>((_) => false);
+
+// Radio button provider
+final radioButtonProvider =
+    ChangeNotifierProvider<OrderScreenProvider>((ref) => OrderScreenProvider());
+
+// Switch Value Provider
+final switchValueProvider =
+    ChangeNotifierProvider<OrderScreenProvider>((ref) => OrderScreenProvider());
+
+/// Connection Provider
+final connectionProvider = ChangeNotifierProvider<ConnectivityProvider>(
+    (ref) => ConnectivityProvider());
 
 // register provider
 final registerHelper =
@@ -75,8 +89,11 @@ final postFavViewModelProvider = ChangeNotifierProvider<FavoriteViewModel>(
     (ref) => FavoriteViewModel(ref.read));
 
 // product details provider
-final productDetails = ChangeNotifierProvider<ProductDetailsViewModel>(
-    (ref) => ProductDetailsViewModel());
+final productDetailsProvider =
+    Provider<ProductDetailsService>((ref) => ProductDetailsService());
+final productDetailsViewModelProvider =
+    ChangeNotifierProvider<ProductDetailsViewModel>(
+        (ref) => ProductDetailsViewModel(ref.read));
 
 //  get favorite data provider
 final favouriteServiceProvider =

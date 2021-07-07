@@ -23,48 +23,72 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     context.read(categoryHelper).fetchCategory();
     context.read(bannerHelper).getHomeData();
+    context.read(connectionProvider).startMonitoring();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 170.h,
-              width: double.infinity,
-              // color: Colors.red,
-              child: Stack(
-                children: [
-                  defaultHeader(height: 145.h, title: 'Home' , context: context),
-                  Positioned(
-                      bottom: 5, right: 0, left: 0, child: InkWell(
-                      onTap: (){
-                        navigateTo(context, SearchScreen());
-                      },
-                      child: searchWidget())),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Consumer(builder: (context, watch, child) {
-              if (context.read(bannerHelper).homeModel != null &&
-                  context.read(categoryHelper).category != null) {
-                if (watch(bannerHelper).isLoading ||
-                    watch(categoryHelper).categoryService.isLoading) {
-                  return LoadingWidget();
-                } else {
-                  return homeBody(watch(bannerHelper).homeModel,
-                      watch(categoryHelper).category, context);
-                }
-              } else
-                return Container();
-            })
-          ],
-        ),
+      body: Consumer(
+        builder: (context, watch, child) {
+           if(watch(connectionProvider).isOnline != null){
+             return watch(connectionProvider).isOnline
+                 ? SingleChildScrollView(
+               child: Column(
+                 children: [
+                   Container(
+                     height: 170.h,
+                     width: double.infinity,
+                     // color: Colors.red,
+                     child: Stack(
+                       children: [
+                         defaultHeader(
+                             height: 145.h,
+                             title: 'Home',
+                             context: context),
+                         Positioned(
+                             bottom: 5,
+                             right: 0,
+                             left: 0,
+                             child: InkWell(
+                                 onTap: () {
+                                   navigateTo(context, SearchScreen());
+                                 },
+                                 child: searchWidget())),
+                       ],
+                     ),
+                   ),
+                   SizedBox(
+                     height: 20.h,
+                   ),
+                   Consumer(builder: (context, watch, child) {
+                     if (context.read(bannerHelper).homeModel != null &&
+                         context.read(categoryHelper).category != null) {
+                       if (watch(bannerHelper).isLoading ||
+                           watch(categoryHelper)
+                               .categoryService
+                               .isLoading) {
+                         return LoadingWidget();
+                       } else {
+                         return homeBody(watch(bannerHelper).homeModel,
+                             watch(categoryHelper).category, context);
+                       }
+                     } else
+                       return Container();
+                   })
+                 ],
+               ),
+             )
+                 : Center(
+                 child: Text(
+                   'No Internet Connection',
+                   style: TextStyle(fontSize: 18.w),
+                 ));
+           }
+           return Container(
+             child: Center(child: CircularProgressIndicator()),
+           );
+        },
       ),
     );
   }
@@ -82,8 +106,9 @@ Widget homeBody(HomeModel model, CategoryModel categoryModel, context) {
               imageUrl: '${e.image}',
               width: double.infinity,
               fit: BoxFit.cover,
-              placeholder: (context , url) => Center(child: CircularProgressIndicator()),
-              errorWidget: (context , url , error) => Icon(Icons.error),
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             );
           }).toList(),
           radius: Radius.circular(10),
@@ -175,10 +200,10 @@ Widget categoryGrid(CategoryData data, context) {
                       width: double.infinity,
                       height: 150.h,
                       fit: BoxFit.fill,
-                      placeholder: (context , url) => Center(child: CircularProgressIndicator()),
-                      errorWidget: (context , url , error) => Icon(Icons.error),
+                      placeholder: (context, url) =>
+                          Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-
                     SizedBox(
                       height: 10.h,
                     ),

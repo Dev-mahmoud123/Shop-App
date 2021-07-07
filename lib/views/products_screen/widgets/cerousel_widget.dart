@@ -29,7 +29,7 @@ class _SliderImagesWidgetState extends State<SliderImagesWidget> {
               return CachedNetworkImage(
                 imageUrl: '${e.toString()}',
                 width: double.infinity,
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
                 placeholder: (context, url) =>
                     Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => Icon(Icons.error),

@@ -49,10 +49,10 @@ class _SelectImageState extends State<SelectImage> {
         Container(
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.grey),
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(120),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(120),
             child: _storedImage != null
                 ? Image.file(
                     _storedImage,

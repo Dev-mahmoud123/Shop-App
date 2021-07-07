@@ -13,7 +13,6 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
 
    profile = await profileService.getProfile();
-    printFullText(profile.data.toString());
     isLoading = false;
     notifyListeners();
   }

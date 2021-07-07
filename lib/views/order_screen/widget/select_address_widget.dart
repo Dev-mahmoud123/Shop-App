@@ -5,7 +5,6 @@ import 'package:shopping/constant/colors.dart';
 import 'package:shopping/models/address/get_address_model.dart';
 import 'package:shopping/provider/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../map_screen.dart';
 
 class SelectAddressWidget extends StatefulWidget {
@@ -14,9 +13,9 @@ class SelectAddressWidget extends StatefulWidget {
 }
 
 class _SelectAddressWidgetState extends State<SelectAddressWidget> {
-
   String selectItem = 'Select Your Location';
   int addressId;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -35,16 +34,12 @@ class _SelectAddressWidgetState extends State<SelectAddressWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 FutureBuilder(
-                  future: context
-                      .read(addressViewModelProvider)
-                      .fetchAddress(),
+                  future: context.read(addressViewModelProvider).fetchAddress(),
                   builder: (context, snapshot) {
                     GetAddressModel model = snapshot.data;
                     if (snapshot.hasData) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(
-                            child: CircularProgressIndicator());
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
                       }
                       return Container(
                         width: 250.w,
@@ -52,10 +47,12 @@ class _SelectAddressWidgetState extends State<SelectAddressWidget> {
                           hint: Text(selectItem),
                           underline: Container(),
                           isExpanded: true,
-                          icon: Icon(Icons.location_on , color: Colors.red,),
-
+                          icon: Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                          ),
                           items: model.data.data.map(
-                                (address) {
+                            (address) {
                               return DropdownMenuItem<int>(
                                 child: Text(
                                   '${address.details},${address.region},${address.city}',
@@ -69,7 +66,7 @@ class _SelectAddressWidgetState extends State<SelectAddressWidget> {
                               );
                             },
                           ).toList(),
-                          onChanged: (newValue){
+                          onChanged: (newValue) {
                             setState(() {
                               addressId = newValue;
                             });
@@ -96,13 +93,14 @@ class _SelectAddressWidgetState extends State<SelectAddressWidget> {
           child: InkWell(
             onTap: () => navigateTo(context, MapScreen()),
             child: Center(
-                child: Text(
-                  '+',
-                  style: TextStyle(
-                    fontSize: 30.w,
-                    color: defaultColor,
-                  ),
-                )),
+              child: Text(
+                '+',
+                style: TextStyle(
+                  fontSize: 30.w,
+                  color: defaultColor,
+                ),
+              ),
+            ),
           ),
         ),
       ],

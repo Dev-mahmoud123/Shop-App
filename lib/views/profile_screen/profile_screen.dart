@@ -16,7 +16,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -24,11 +23,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String selectedImage;
   String name, email, phone;
 
-
   @override
   void initState() {
     super.initState();
     context.read(profileHelper).getProfile();
+    context.read(connectionProvider).startMonitoring();
   }
 
   void _onSelectedImage(File pickedImage) {
@@ -38,114 +37,133 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            defaultHeader(height: 100.h, title: 'My Account' , context: context),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Consumer(
-                builder: (context, watch, child) {
-                  if (watch(profileHelper).isLoading) {
-                    return LoadingWidget();
-                  } else {
-                    var model = watch(profileHelper).profile;
-                    nameController.text = model.data.name;
-                    emailController.text = model.data.email;
-                    phoneController.text = model.data.phone;
+      body: Consumer(
+        builder: (context, watch, child) {
+          return watch(connectionProvider).isOnline
+              ? SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      defaultHeader(
+                          height: 100.h, title: 'My Account', context: context),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Consumer(
+                          builder: (context, watch, child) {
+                            if (watch(profileHelper).isLoading) {
+                              return LoadingWidget();
+                            } else {
+                              var model = watch(profileHelper).profile;
+                              nameController.text = model.data.name;
+                              emailController.text = model.data.email;
+                              phoneController.text = model.data.phone;
 
-                    return Form(
-                      key:_formKey,
-                      child: Column(
-                        children: [
-                          SelectImage(onSelected: _onSelectedImage,),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          defaultTextField(
-                              label: 'Name',
-                              prefixIcon: Icon(Icons.person),
-                              type: TextInputType.name,
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return 'Name must not be empty';
-                                }
-                                return null;
-                              },
-                              controller: nameController,
-                              onSaved: (value) {
-                                name = value;
-                              }
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          defaultTextField(
-                              label: 'Email',
-                              prefixIcon: Icon(Icons.email),
-                              type: TextInputType.emailAddress,
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return 'Email must not be empty';
-                                }
-                                return null;
-                              },
-                              controller: emailController,
-                              onSaved: (value) {
-                                email = value;
-                              }
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          defaultTextField(
-                              label: 'Phone',
-                              prefixIcon: Icon(Icons.phone),
-                              type: TextInputType.phone,
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return 'Phone must not be empty';
-                                }
-                                return null;
-                              },
-                              controller: phoneController,
-                              onSaved: (value) {
-                                phone = value;
-                              }
-                          ),
-                          SizedBox(
-                            height: 30.h,
-                          ),
-                         PasswordForm(),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: defaultColor),
-                              child: defaultTextButton(
-                                  press: () {
-                                    if(_formKey.currentState.validate()){
-                                      context.read(updateProfileViewModel)
-                                          .putProfile(name: nameController.text,
-                                          email: emailController.text,
-                                          phone: phoneController.text,
-                                          image: selectedImage);
-                                    }
-                                  },
-                                  text: 'UPDATE',
-                                  color: titleColor)),
-                        ],
+                              return Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    SelectImage(
+                                      onSelected: _onSelectedImage,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    defaultTextField(
+                                        label: 'Name',
+                                        prefixIcon: Icon(Icons.person),
+                                        type: TextInputType.name,
+                                        validator: (String value) {
+                                          if (value.isEmpty) {
+                                            return 'Name must not be empty';
+                                          }
+                                          return null;
+                                        },
+                                        controller: nameController,
+                                        onSaved: (value) {
+                                          name = value;
+                                        }),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    defaultTextField(
+                                        label: 'Email',
+                                        prefixIcon: Icon(Icons.email),
+                                        type: TextInputType.emailAddress,
+                                        validator: (String value) {
+                                          if (value.isEmpty) {
+                                            return 'Email must not be empty';
+                                          }
+                                          return null;
+                                        },
+                                        controller: emailController,
+                                        onSaved: (value) {
+                                          email = value;
+                                        }),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    defaultTextField(
+                                        label: 'Phone',
+                                        prefixIcon: Icon(Icons.phone),
+                                        type: TextInputType.phone,
+                                        validator: (String value) {
+                                          if (value.isEmpty) {
+                                            return 'Phone must not be empty';
+                                          }
+                                          return null;
+                                        },
+                                        controller: phoneController,
+                                        onSaved: (value) {
+                                          phone = value;
+                                        }),
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
+                                    PasswordForm(),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: defaultColor),
+                                        child: defaultTextButton(
+                                            press: () {
+                                              if (_formKey.currentState
+                                                  .validate()) {
+                                                context
+                                                    .read(
+                                                        updateProfileViewModel)
+                                                    .putProfile(
+                                                        name:
+                                                            nameController.text,
+                                                        email: emailController
+                                                            .text,
+                                                        phone: phoneController
+                                                            .text,
+                                                        image: selectedImage);
+                                              }
+                                            },
+                                            text: 'UPDATE',
+                                            color: titleColor)),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ),
-                    );
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    'No Internet Connection',
+                    style: TextStyle(fontSize: 18.w),
+                  ),
+                );
+        },
       ),
     );
   }

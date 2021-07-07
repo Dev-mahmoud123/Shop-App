@@ -12,7 +12,6 @@ class GetProfileService extends ChangeNotifier {
 
   // ignore: missing_return
   Future<Auth> getProfile() async {
-   print('profile service');
     isLoading = true;
     notifyListeners();
 
