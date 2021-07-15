@@ -49,29 +49,33 @@ class _SliderImagesWidgetState extends State<SliderImagesWidget> {
             showIndicator: true,
           ),
           Positioned(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Consumer(
-              builder: (context , watch , child)=> Container(
-                height: 40.h,
-                width: 40.w,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color:widget.model.data.inFavorites ? defaultColor: Colors.black12),
-                child: IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  onPressed: () {
-                   setState(() {
-                     widget.model.data.inFavorites = !widget.model.data.inFavorites;
-                   });
-                    watch(postFavViewModelProvider).addAndDeleteFavorite(productId: widget.model.data.id);
-
-                  },
-                  color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Consumer(
+                builder: (context, watch, child) => Container(
+                  height: 40.h,
+                  width: 40.w,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      color: widget.model.data.inFavorites
+                          ? defaultColor
+                          : Colors.black12),
+                  child: IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: () {
+                      setState(() {
+                        widget.model.data.inFavorites =
+                            !widget.model.data.inFavorites;
+                      });
+                      watch(postFavViewModelProvider).addAndDeleteFavorite(
+                          productId: widget.model.data.id);
+                    },
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ))
+          )
         ],
       ),
     );

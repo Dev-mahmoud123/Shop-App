@@ -11,7 +11,6 @@ class FavoriteProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('//////');
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),

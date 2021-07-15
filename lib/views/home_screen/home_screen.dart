@@ -31,63 +31,64 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Consumer(
         builder: (context, watch, child) {
-           if(watch(connectionProvider).isOnline != null){
-             return watch(connectionProvider).isOnline
-                 ? SingleChildScrollView(
-               child: Column(
-                 children: [
-                   Container(
-                     height: 170.h,
-                     width: double.infinity,
-                     // color: Colors.red,
-                     child: Stack(
-                       children: [
-                         defaultHeader(
-                             height: 145.h,
-                             title: 'Home',
-                             context: context),
-                         Positioned(
-                             bottom: 5,
-                             right: 0,
-                             left: 0,
-                             child: InkWell(
-                                 onTap: () {
-                                   navigateTo(context, SearchScreen());
-                                 },
-                                 child: searchWidget())),
-                       ],
-                     ),
-                   ),
-                   SizedBox(
-                     height: 20.h,
-                   ),
-                   Consumer(builder: (context, watch, child) {
-                     if (context.read(bannerHelper).homeModel != null &&
-                         context.read(categoryHelper).category != null) {
-                       if (watch(bannerHelper).isLoading ||
-                           watch(categoryHelper)
-                               .categoryService
-                               .isLoading) {
-                         return LoadingWidget();
-                       } else {
-                         return homeBody(watch(bannerHelper).homeModel,
-                             watch(categoryHelper).category, context);
-                       }
-                     } else
-                       return Container();
-                   })
-                 ],
-               ),
-             )
-                 : Center(
-                 child: Text(
-                   'No Internet Connection',
-                   style: TextStyle(fontSize: 18.w),
-                 ));
-           }
-           return Container(
-             child: Center(child: CircularProgressIndicator()),
-           );
+          if (watch(connectionProvider).isOnline != null) {
+            return watch(connectionProvider).isOnline
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 170.h,
+                          width: double.infinity,
+                          // color: Colors.red,
+                          child: Stack(
+                            children: [
+                              defaultHeader(
+                                  height: 145.h,
+                                  title: 'Home',
+                                  context: context),
+                              Positioned(
+                                bottom: 5,
+                                right: 0,
+                                left: 0,
+                                child: InkWell(
+                                    onTap: () {
+                                      navigateTo(context, SearchScreen());
+                                    },
+                                    child: searchWidget()),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Consumer(builder: (context, watch, child) {
+                          if (context.read(bannerHelper).homeModel != null &&
+                              context.read(categoryHelper).category != null) {
+                            if (watch(bannerHelper).isLoading ||
+                                watch(categoryHelper)
+                                    .categoryService
+                                    .isLoading) {
+                              return LoadingWidget();
+                            } else {
+                              return homeBody(watch(bannerHelper).homeModel,
+                                  watch(categoryHelper).category, context);
+                            }
+                          } else
+                            return Container();
+                        }),
+                      ],
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                    'No Internet Connection',
+                    style: TextStyle(fontSize: 18.w),
+                  ));
+          }
+          return Container(
+            child: Center(child: CircularProgressIndicator()),
+          );
         },
       ),
     );
